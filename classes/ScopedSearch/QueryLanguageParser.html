@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Class: ScopedSearch::QueryLanguageParser</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Class</strong></td>
+          <td class="class-name-in-header">ScopedSearch::QueryLanguageParser</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../../files/lib/scoped_search/query_language_parser_rb.html">
+                lib/scoped_search/query_language_parser.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        <tr class="top-aligned-row">
+            <td><strong>Parent:</strong></td>
+            <td>
+                Object
+            </td>
+        </tr>
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+    <div id="description">
+      <p>
+Used to <a href="QueryLanguageParser.html#M000003">parse</a> and build the
+conditions tree for the search.
+</p>
+
+    </div>
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000005">build_conditions_tree</a>&nbsp;&nbsp;
+      <a href="#M000003">parse</a>&nbsp;&nbsp;
+      <a href="#M000004">parse_query</a>&nbsp;&nbsp;
+      <a href="#M000006">tokenize</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Class methods</h3>
+
+      <div id="method-M000003" class="method-detail">
+        <a name="M000003"></a>
+
+        <div class="method-heading">
+          <a href="#M000003" class="method-signature">
+          <span class="method-name">parse</span><span class="method-args">(query)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Parses the query string by calling the <a
+href="QueryLanguageParser.html#M000004">parse_query</a> method on a new
+instances of <a href="QueryLanguageParser.html">QueryLanguageParser</a>.
+</p>
+<table>
+<tr><td valign="top">query:</td><td>The query string to <a href="QueryLanguageParser.html#M000003">parse</a>.
+If nil the all values will be returned (default is nil) If the query string
+is longer then 300 characters then it will be truncated to a length of 300.
+
+</td></tr>
+</table>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000003-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000003-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/scoped_search/query_language_parser.rb, line 11</span>
+11:     <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">query</span>)
+12:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">parse_query</span>(<span class="ruby-identifier">query</span>)
+13:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000004" class="method-detail">
+        <a name="M000004"></a>
+
+        <div class="method-heading">
+          <a href="#M000004" class="method-signature">
+          <span class="method-name">parse_query</span><span class="method-args">(query = nil)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Parse the query string.
+</p>
+<table>
+<tr><td valign="top">query:</td><td>The query string to <a href="QueryLanguageParser.html#M000003">parse</a>.
+If nil the all values will be returned (default is nil) If the query string
+is longer then 300 characters then it will be truncated to a length of 300.
+
+</td></tr>
+</table>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000004-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000004-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/scoped_search/query_language_parser.rb, line 20</span>
+20:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">parse_query</span>(<span class="ruby-identifier">query</span> = <span class="ruby-keyword kw">nil</span>)
+21:       <span class="ruby-comment cmt"># truncate query string at 300 characters</span>
+22:       <span class="ruby-identifier">query</span> = <span class="ruby-identifier">query</span>[<span class="ruby-value">0</span><span class="ruby-operator">...</span><span class="ruby-value">300</span>] <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">query</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">300</span>
+23:       <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">build_conditions_tree</span>(<span class="ruby-identifier">tokenize</span>(<span class="ruby-identifier">query</span>))
+24:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="section-bar">Protected Instance methods</h3>
+
+      <div id="method-M000005" class="method-detail">
+        <a name="M000005"></a>
+
+        <div class="method-heading">
+          <a href="#M000005" class="method-signature">
+          <span class="method-name">build_conditions_tree</span><span class="method-args">(tokens)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Build the conditions tree based on the tokens found.
+</p>
+<table>
+<tr><td valign="top">tokens:</td><td>An array of tokens.
+
+</td></tr>
+</table>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000005-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000005-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/scoped_search/query_language_parser.rb, line 31</span>
+31:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">build_conditions_tree</span>(<span class="ruby-identifier">tokens</span>)
+32:       <span class="ruby-identifier">conditions_tree</span> = []
+33:     
+34:       <span class="ruby-identifier">negate</span> = <span class="ruby-keyword kw">false</span>
+35:       <span class="ruby-identifier">tokens</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">item</span><span class="ruby-operator">|</span>
+36:         <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">item</span>
+37:           <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:not</span>
+38:             <span class="ruby-identifier">negate</span> = <span class="ruby-keyword kw">true</span>
+39:           <span class="ruby-keyword kw">else</span>
+40:             <span class="ruby-keyword kw">if</span> <span class="ruby-regexp re">/^.+[ ]OR[ ].+$/</span> <span class="ruby-operator">=~</span> <span class="ruby-identifier">item</span>
+41:               <span class="ruby-identifier">conditions_tree</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-identifier">item</span>, <span class="ruby-identifier">:or</span>]
+42:             <span class="ruby-keyword kw">elsif</span> <span class="ruby-node">/^#{RegTokens::BetweenDateFormatMMDDYYYY}$/</span> <span class="ruby-operator">=~</span> <span class="ruby-identifier">item</span> <span class="ruby-keyword kw">or</span>
+43:                   <span class="ruby-node">/^#{RegTokens::BetweenDateFormatYYYYMMDD}$/</span> <span class="ruby-operator">=~</span> <span class="ruby-identifier">item</span> <span class="ruby-keyword kw">or</span>
+44:                   <span class="ruby-node">/^#{RegTokens::BetweenDatabaseFormat}$/</span> <span class="ruby-operator">=~</span> <span class="ruby-identifier">item</span>
+45:               <span class="ruby-identifier">conditions_tree</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-identifier">item</span>, <span class="ruby-identifier">:between_dates</span>]              
+46:             <span class="ruby-keyword kw">elsif</span> <span class="ruby-node">/^#{RegTokens::GreaterThanOrEqualToDateFormatMMDDYYYY}$/</span> <span class="ruby-operator">=~</span> <span class="ruby-identifier">item</span> <span class="ruby-keyword kw">or</span>
+47:                   <span class="ruby-node">/^#{RegTokens::GreaterThanOrEqualToDateFormatYYYYMMDD}$/</span> <span class="ruby-operator">=~</span> <span class="ruby-identifier">item</span> <span class="ruby-keyword kw">or</span>
+48:                   <span class="ruby-node">/^#{RegTokens::GreaterThanOrEqualToDatabaseFormat}$/</span> <span class="ruby-operator">=~</span> <span class="ruby-identifier">item</span>
+49:               <span class="ruby-identifier">conditions_tree</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-identifier">item</span>, <span class="ruby-identifier">:greater_than_or_equal_to_date</span>] 
+50:             <span class="ruby-keyword kw">elsif</span> <span class="ruby-node">/^#{RegTokens::LessThanOrEqualToDateFormatMMDDYYYY}$/</span> <span class="ruby-operator">=~</span> <span class="ruby-identifier">item</span> <span class="ruby-keyword kw">or</span>
+51:                   <span class="ruby-node">/^#{RegTokens::LessThanOrEqualToDateFormatYYYYMMDD}$/</span> <span class="ruby-operator">=~</span> <span class="ruby-identifier">item</span> <span class="ruby-keyword kw">or</span>
+52:                   <span class="ruby-node">/^#{RegTokens::LessThanOrEqualToDatabaseFormat}$/</span> <span class="ruby-operator">=~</span> <span class="ruby-identifier">item</span>
+53:               <span class="ruby-identifier">conditions_tree</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-identifier">item</span>, <span class="ruby-identifier">:less_than_or_equal_to_date</span>]              
+54:             <span class="ruby-keyword kw">elsif</span> <span class="ruby-node">/^#{RegTokens::GreaterThanDateFormatMMDDYYYY}$/</span> <span class="ruby-operator">=~</span> <span class="ruby-identifier">item</span> <span class="ruby-keyword kw">or</span>
+55:                   <span class="ruby-node">/^#{RegTokens::GreaterThanDateFormatYYYYMMDD}$/</span> <span class="ruby-operator">=~</span> <span class="ruby-identifier">item</span> <span class="ruby-keyword kw">or</span>
+56:                   <span class="ruby-node">/^#{RegTokens::GreaterThanDatabaseFormat}$/</span> <span class="ruby-operator">=~</span> <span class="ruby-identifier">item</span>
+57:               <span class="ruby-identifier">conditions_tree</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-identifier">item</span>, <span class="ruby-identifier">:greater_than_date</span>] 
+58:             <span class="ruby-keyword kw">elsif</span> <span class="ruby-node">/^#{RegTokens::LessThanDateFormatMMDDYYYY}$/</span> <span class="ruby-operator">=~</span> <span class="ruby-identifier">item</span> <span class="ruby-keyword kw">or</span>
+59:                   <span class="ruby-node">/^#{RegTokens::LessThanDateFormatYYYYMMDD}$/</span> <span class="ruby-operator">=~</span> <span class="ruby-identifier">item</span> <span class="ruby-keyword kw">or</span>
+60:                   <span class="ruby-node">/^#{RegTokens::LessThanDatabaseFormat}$/</span> <span class="ruby-operator">=~</span> <span class="ruby-identifier">item</span>
+61:               <span class="ruby-identifier">conditions_tree</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-identifier">item</span>, <span class="ruby-identifier">:less_than_date</span>]                           
+62:             <span class="ruby-keyword kw">elsif</span> <span class="ruby-node">/^#{RegTokens::DateFormatMMDDYYYY}$/</span> <span class="ruby-operator">=~</span> <span class="ruby-identifier">item</span> <span class="ruby-keyword kw">or</span>
+63:                   <span class="ruby-node">/^#{RegTokens::DateFormatYYYYMMDD}$/</span> <span class="ruby-operator">=~</span> <span class="ruby-identifier">item</span> <span class="ruby-keyword kw">or</span>
+64:                   <span class="ruby-node">/^#{RegTokens::DatabaseFormat}$/</span> <span class="ruby-operator">=~</span> <span class="ruby-identifier">item</span>
+65:               <span class="ruby-identifier">conditions_tree</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-identifier">item</span>, <span class="ruby-identifier">:as_of_date</span>]
+66:             <span class="ruby-keyword kw">else</span>
+67:               <span class="ruby-identifier">conditions_tree</span> <span class="ruby-operator">&lt;&lt;</span> (<span class="ruby-identifier">negate</span> <span class="ruby-value">? </span>[<span class="ruby-identifier">item</span>, <span class="ruby-identifier">:not</span>] <span class="ruby-operator">:</span> [<span class="ruby-identifier">item</span>, <span class="ruby-identifier">:like</span>])
+68:               <span class="ruby-identifier">negate</span> = <span class="ruby-keyword kw">false</span>
+69:             <span class="ruby-keyword kw">end</span>
+70:         <span class="ruby-keyword kw">end</span>
+71:       <span class="ruby-keyword kw">end</span>
+72:       
+73:       <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">conditions_tree</span>
+74:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000006" class="method-detail">
+        <a name="M000006"></a>
+
+        <div class="method-heading">
+          <a href="#M000006" class="method-signature">
+          <span class="method-name">tokenize</span><span class="method-args">(query)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Tokenize the query based on the different <a
+href="../RegTokens.html">RegTokens</a>.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000006-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000006-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/scoped_search/query_language_parser.rb, line 77</span>
+ 77:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">tokenize</span>(<span class="ruby-identifier">query</span>)
+ 78:       <span class="ruby-identifier">pattern</span> = [<span class="ruby-constant">RegTokens</span><span class="ruby-operator">::</span><span class="ruby-constant">BetweenDateFormatMMDDYYYY</span>,
+ 79:                  <span class="ruby-constant">RegTokens</span><span class="ruby-operator">::</span><span class="ruby-constant">BetweenDateFormatYYYYMMDD</span>,
+ 80:                  <span class="ruby-constant">RegTokens</span><span class="ruby-operator">::</span><span class="ruby-constant">BetweenDatabaseFormat</span>,
+ 81:                  <span class="ruby-constant">RegTokens</span><span class="ruby-operator">::</span><span class="ruby-constant">GreaterThanOrEqualToDateFormatMMDDYYYY</span>,
+ 82:                  <span class="ruby-constant">RegTokens</span><span class="ruby-operator">::</span><span class="ruby-constant">GreaterThanOrEqualToDateFormatYYYYMMDD</span>,
+ 83:                  <span class="ruby-constant">RegTokens</span><span class="ruby-operator">::</span><span class="ruby-constant">GreaterThanOrEqualToDatabaseFormat</span>,
+ 84:                  <span class="ruby-constant">RegTokens</span><span class="ruby-operator">::</span><span class="ruby-constant">LessThanOrEqualToDateFormatMMDDYYYY</span>,
+ 85:                  <span class="ruby-constant">RegTokens</span><span class="ruby-operator">::</span><span class="ruby-constant">LessThanOrEqualToDateFormatYYYYMMDD</span>,
+ 86:                  <span class="ruby-constant">RegTokens</span><span class="ruby-operator">::</span><span class="ruby-constant">LessThanOrEqualToDatabaseFormat</span>,
+ 87:                  <span class="ruby-constant">RegTokens</span><span class="ruby-operator">::</span><span class="ruby-constant">GreaterThanDateFormatMMDDYYYY</span>,
+ 88:                  <span class="ruby-constant">RegTokens</span><span class="ruby-operator">::</span><span class="ruby-constant">GreaterThanDateFormatYYYYMMDD</span>,
+ 89:                  <span class="ruby-constant">RegTokens</span><span class="ruby-operator">::</span><span class="ruby-constant">GreaterThanDatabaseFormat</span>,
+ 90:                  <span class="ruby-constant">RegTokens</span><span class="ruby-operator">::</span><span class="ruby-constant">LessThanDateFormatMMDDYYYY</span>,
+ 91:                  <span class="ruby-constant">RegTokens</span><span class="ruby-operator">::</span><span class="ruby-constant">LessThanDateFormatYYYYMMDD</span>,
+ 92:                  <span class="ruby-constant">RegTokens</span><span class="ruby-operator">::</span><span class="ruby-constant">LessThanDatabaseFormat</span>,
+ 93:                  <span class="ruby-constant">RegTokens</span><span class="ruby-operator">::</span><span class="ruby-constant">DateFormatMMDDYYYY</span>,
+ 94:                  <span class="ruby-constant">RegTokens</span><span class="ruby-operator">::</span><span class="ruby-constant">DateFormatYYYYMMDD</span>,
+ 95:                  <span class="ruby-constant">RegTokens</span><span class="ruby-operator">::</span><span class="ruby-constant">DatabaseFormat</span>,           
+ 96:                  <span class="ruby-constant">RegTokens</span><span class="ruby-operator">::</span><span class="ruby-constant">WordOrWord</span>,
+ 97:                  <span class="ruby-constant">RegTokens</span><span class="ruby-operator">::</span><span class="ruby-constant">WordOrString</span>,
+ 98:                  <span class="ruby-constant">RegTokens</span><span class="ruby-operator">::</span><span class="ruby-constant">StringOrWord</span>,
+ 99:                  <span class="ruby-constant">RegTokens</span><span class="ruby-operator">::</span><span class="ruby-constant">StringOrString</span>,
+100:                  <span class="ruby-constant">RegTokens</span><span class="ruby-operator">::</span><span class="ruby-constant">PossiblyNegatedWord</span>,
+101:                  <span class="ruby-constant">RegTokens</span><span class="ruby-operator">::</span><span class="ruby-constant">PossiblyNegatedString</span>]               
+102:       <span class="ruby-identifier">pattern</span> = <span class="ruby-constant">Regexp</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">pattern</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">'|'</span>))
+103:       
+104:       <span class="ruby-identifier">tokens</span> = []
+105:       <span class="ruby-identifier">matches</span> = <span class="ruby-identifier">query</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-identifier">pattern</span>).<span class="ruby-identifier">flatten</span>.<span class="ruby-identifier">compact</span>
+106:       <span class="ruby-identifier">matches</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">match</span><span class="ruby-operator">|</span>
+107:         <span class="ruby-identifier">tokens</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">:not</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">match</span>.<span class="ruby-identifier">index</span>(<span class="ruby-value str">'-'</span>) <span class="ruby-operator">==</span> <span class="ruby-value">0</span>
+108:         <span class="ruby-comment cmt"># Remove any escaped quotes</span>
+109:         <span class="ruby-comment cmt"># Remove any dashes preceded by a space or at the beginning of a token</span>
+110:         <span class="ruby-comment cmt"># Remove any additional spaces - more that one.</span>
+111:         <span class="ruby-identifier">cleaned_token</span> = <span class="ruby-identifier">match</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/&quot;/</span>,<span class="ruby-value str">''</span>).<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/^-| -/</span>,<span class="ruby-value str">''</span>).<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/[ ]{2,}/</span>, <span class="ruby-value str">' '</span>)
+112:         <span class="ruby-identifier">tokens</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">cleaned_token</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">cleaned_token</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
+113:       }
+114:       <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">tokens</span>
+115:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

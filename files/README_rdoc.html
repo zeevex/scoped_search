@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>File: README.rdoc</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+  <div id="fileHeader">
+    <h1>README.rdoc</h1>
+    <table class="header-table">
+    <tr class="top-aligned-row">
+      <td><strong>Path:</strong></td>
+      <td>README.rdoc
+      </td>
+    </tr>
+    <tr class="top-aligned-row">
+      <td><strong>Last Update:</strong></td>
+      <td>Thu Jan 29 05:07:00 +0100 2009</td>
+    </tr>
+    </table>
+  </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+    <div id="description">
+      <h1><a href="http://github.com/wvanbergen/scoped_search/tree/master">scoped_search</a></h1>
+<p>
+This simple plugin will make it easy to search your ActiveRecord models.
+Searching is performed using a query string, which should be passed to the
+named_scope <b>search_for</b> that uses SQL %LIKE% conditions for searching
+(ILIKE for Postgres). You can specify what fields should be used for
+searching.
+</p>
+<h2>Installing</h2>
+<pre>
+        gem install wvanbergen-scoped_search
+</pre>
+<h2>Usage</h2>
+<p>
+First, you have to specify in what columns should be searched:
+</p>
+<pre>
+        class User &lt; ActiveRecord::Base
+          searchable_on :first_name, :last_name
+        end
+</pre>
+<p>
+Now, the <b>search_for</b> scope is available for queries. You should pass
+a query string to the scope. This can be empty or nil, in which case all no
+search conditions are set (and all records will be returned).
+</p>
+<pre>
+        User.search_for(params[:q]).each { |project| ... }
+</pre>
+<p>
+You can also search on associate models. This works with <b>belongs_to</b>,
+<b>has_one</b>, <b>has_many</b>, <b>has_many :through</b>, and
+<b>HABTM</b>. For example if a User <b>has_many</b> Notes (title, content,
+created_at, updated_at)
+</p>
+<pre>
+        class User &lt; ActiveRecord::Base
+          has_many: notes
+          searchable_on :first_name, :last_name, :notes_title, :notes_content
+        end
+</pre>
+<p>
+The search query language is simple. It supports these constructs:
+</p>
+<ul>
+<li><b>words:</b> some search keywords
+
+</li>
+<li><b>phrases:</b> &quot;a single search phrase&quot;
+
+</li>
+<li><b>negation:</b> &quot;look for this&quot; -&quot;but do not look for this
+phrase and this&quot; -word
+
+</li>
+<li><b>OR words/phrases:</b> word/phrase OR word/phrase. Example: &quot;Hello
+World&quot; OR &quot;Hello Moon&quot;
+
+</li>
+<li><b>dates:</b> mm/dd/yyyy, dd/mm/yyyy, yyyy/mm/dd, yyyy-mm-dd
+
+</li>
+<li><b>date ranges:</b> &gt; date, &gt;= date, &lt; date, &lt;= date, date TO
+date. Examples: &gt; mm/dd/yyyy, &lt; yyyy-mm-dd
+
+</li>
+</ul>
+<p>
+This functionality is build on named_scope. The searchable_on statement
+creates a named_scope <b>search_for</b>. Because of this, you can actually
+chain the call with other scopes. For example, this can be very useful if
+you only want to search in projects that are accessible by a given user.
+</p>
+<pre>
+        class Project &lt; ActiveRecord::Base
+          searchable_on :name, :description
+          named_scope :accessible_by, lambda { |user| ... }
+        end
+
+        # using chained named_scopes and will_paginate
+        Project.accessible_by(current_user).search_for(params[:q]).paginate(:page =&gt; params[:page], :include =&gt; :tasks)
+</pre>
+<h2>License</h2>
+<p>
+This plugin is released under the MIT license. Please contact (willem AT
+vanbergen DOT org) if you have any suggestions or remarks.
+</p>
+
+    </div>
+
+
+   </div>
+
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>
