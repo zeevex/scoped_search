@@ -56,7 +56,7 @@
     </tr>
     <tr class="top-aligned-row">
       <td><strong>Last Update:</strong></td>
-      <td>Thu Jan 29 05:07:00 +0100 2009</td>
+      <td>Thu Jan 29 06:36:25 +0100 2009</td>
     </tr>
     </table>
   </div>
@@ -69,7 +69,7 @@
   <div id="contextContent">
 
     <div id="description">
-      <h1><a href="http://github.com/wvanbergen/scoped_search/tree/master">scoped_search</a></h1>
+      <h1>scoped_search</h1>
 <p>
 This simple plugin will make it easy to search your ActiveRecord models.
 Searching is performed using a query string, which should be passed to the
@@ -79,7 +79,7 @@ searching.
 </p>
 <h2>Installing</h2>
 <pre>
-        gem install wvanbergen-scoped_search
+        gem install wvanbergen-scoped_search -s http://gems.github.com
 </pre>
 <h2>Usage</h2>
 <p>
@@ -151,6 +151,25 @@ you only want to search in projects that are accessible by a given user.
         # using chained named_scopes and will_paginate
         Project.accessible_by(current_user).search_for(params[:q]).paginate(:page =&gt; params[:page], :include =&gt; :tasks)
 </pre>
+<h2>Additional resources</h2>
+<ul>
+<li>Source code: <a
+href="http://github.com/wvanbergen/scoped_search">github.com/wvanbergen/scoped_search</a>
+
+</li>
+<li>Project wiki: <a
+href="http://wiki.github.com/wvanbergen/scoped_search">wiki.github.com/wvanbergen/scoped_search</a>
+
+</li>
+<li>RDoc documentation: <a
+href="http://wvanbergen.github.com/scoped_search">wvanbergen.github.com/scoped_search</a>
+
+</li>
+<li>wvanbergen&#8216;s blog posts: <a
+href="http://techblog.floorplanner.com/tag/scoped_search">techblog.floorplanner.com/tag/scoped_search</a>/
+
+</li>
+</ul>
 <h2>License</h2>
 <p>
 This plugin is released under the MIT license. Please contact (willem AT
