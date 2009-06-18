@@ -221,26 +221,24 @@ Exceptons :
 44:       <span class="ruby-identifier">search_conditions</span>.<span class="ruby-identifier">each_with_index</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">search_condition</span>, <span class="ruby-identifier">index</span><span class="ruby-operator">|</span>
 45:         <span class="ruby-identifier">keyword_name</span> = <span class="ruby-node">&quot;keyword_#{index}&quot;</span>.<span class="ruby-identifier">to_sym</span>
 46:         <span class="ruby-identifier">conditions</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">search_condition</span>.<span class="ruby-identifier">last</span>
-47:                         <span class="ruby-comment cmt"># Still thinking about this one</span>
-48:                         <span class="ruby-comment cmt"># when :integer: integer_conditions(keyword_name, search_condition.first)</span>
-49:           
-50:                         <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:like</span><span class="ruby-operator">:</span> <span class="ruby-identifier">like_condition</span>(<span class="ruby-identifier">keyword_name</span>, <span class="ruby-identifier">search_condition</span>.<span class="ruby-identifier">first</span>)
-51:                         <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:not</span><span class="ruby-operator">:</span> <span class="ruby-identifier">not_like_condition</span>(<span class="ruby-identifier">keyword_name</span>, <span class="ruby-identifier">search_condition</span>.<span class="ruby-identifier">first</span>)
-52:             
-53:                         <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:or</span><span class="ruby-operator">:</span> <span class="ruby-identifier">or_condition</span>(<span class="ruby-identifier">keyword_name</span>, <span class="ruby-identifier">search_condition</span>.<span class="ruby-identifier">first</span>)
-54:       
-55:                         <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:less_than_date</span><span class="ruby-operator">:</span> <span class="ruby-identifier">less_than_date</span>(<span class="ruby-identifier">keyword_name</span>, <span class="ruby-identifier">search_condition</span>.<span class="ruby-identifier">first</span>)      
-56:                         <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:less_than_or_equal_to_date</span><span class="ruby-operator">:</span> <span class="ruby-identifier">less_than_or_equal_to_date</span>(<span class="ruby-identifier">keyword_name</span>, <span class="ruby-identifier">search_condition</span>.<span class="ruby-identifier">first</span>)   
-57:                         <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:as_of_date</span><span class="ruby-operator">:</span> <span class="ruby-identifier">as_of_date</span>(<span class="ruby-identifier">keyword_name</span>, <span class="ruby-identifier">search_condition</span>.<span class="ruby-identifier">first</span>)      
-58:                         <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:greater_than_date</span><span class="ruby-operator">:</span> <span class="ruby-identifier">greater_than_date</span>(<span class="ruby-identifier">keyword_name</span>, <span class="ruby-identifier">search_condition</span>.<span class="ruby-identifier">first</span>) 
-59:                         <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:greater_than_or_equal_to_date</span><span class="ruby-operator">:</span> <span class="ruby-identifier">greater_than_or_equal_to_date</span>(<span class="ruby-identifier">keyword_name</span>, <span class="ruby-identifier">search_condition</span>.<span class="ruby-identifier">first</span>)   
-60:                         
-61:                         <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:between_dates</span><span class="ruby-operator">:</span> <span class="ruby-identifier">between_dates</span>(<span class="ruby-identifier">keyword_name</span>, <span class="ruby-identifier">search_condition</span>.<span class="ruby-identifier">first</span>)                                                        
-62:                       <span class="ruby-keyword kw">end</span>          
-63:       <span class="ruby-keyword kw">end</span>
-64: 
-65:       [<span class="ruby-identifier">conditions</span>.<span class="ruby-identifier">compact</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">' AND '</span>), <span class="ruby-ivar">@query_params</span>] 
-66:     <span class="ruby-keyword kw">end</span>
+47:                         <span class="ruby-comment cmt"># :like also handles integers</span>
+48:                         <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:like</span> <span class="ruby-keyword kw">then</span> <span class="ruby-identifier">like_condition</span>(<span class="ruby-identifier">keyword_name</span>, <span class="ruby-identifier">search_condition</span>.<span class="ruby-identifier">first</span>)
+49:                         <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:not</span> <span class="ruby-keyword kw">then</span> <span class="ruby-identifier">not_like_condition</span>(<span class="ruby-identifier">keyword_name</span>, <span class="ruby-identifier">search_condition</span>.<span class="ruby-identifier">first</span>)
+50:             
+51:                         <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:or</span> <span class="ruby-keyword kw">then</span> <span class="ruby-identifier">or_condition</span>(<span class="ruby-identifier">keyword_name</span>, <span class="ruby-identifier">search_condition</span>.<span class="ruby-identifier">first</span>)
+52:       
+53:                         <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:less_than_date</span> <span class="ruby-keyword kw">then</span> <span class="ruby-identifier">less_than_date</span>(<span class="ruby-identifier">keyword_name</span>, <span class="ruby-identifier">search_condition</span>.<span class="ruby-identifier">first</span>)      
+54:                         <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:less_than_or_equal_to_date</span> <span class="ruby-keyword kw">then</span> <span class="ruby-identifier">less_than_or_equal_to_date</span>(<span class="ruby-identifier">keyword_name</span>, <span class="ruby-identifier">search_condition</span>.<span class="ruby-identifier">first</span>)   
+55:                         <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:as_of_date</span> <span class="ruby-keyword kw">then</span> <span class="ruby-identifier">as_of_date</span>(<span class="ruby-identifier">keyword_name</span>, <span class="ruby-identifier">search_condition</span>.<span class="ruby-identifier">first</span>)      
+56:                         <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:greater_than_date</span> <span class="ruby-keyword kw">then</span> <span class="ruby-identifier">greater_than_date</span>(<span class="ruby-identifier">keyword_name</span>, <span class="ruby-identifier">search_condition</span>.<span class="ruby-identifier">first</span>) 
+57:                         <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:greater_than_or_equal_to_date</span> <span class="ruby-keyword kw">then</span> <span class="ruby-identifier">greater_than_or_equal_to_date</span>(<span class="ruby-identifier">keyword_name</span>, <span class="ruby-identifier">search_condition</span>.<span class="ruby-identifier">first</span>)   
+58:                         
+59:                         <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:between_dates</span> <span class="ruby-keyword kw">then</span> <span class="ruby-identifier">between_dates</span>(<span class="ruby-identifier">keyword_name</span>, <span class="ruby-identifier">search_condition</span>.<span class="ruby-identifier">first</span>)                                                        
+60:                       <span class="ruby-keyword kw">end</span>          
+61:       <span class="ruby-keyword kw">end</span>
+62: 
+63:       [<span class="ruby-identifier">conditions</span>.<span class="ruby-identifier">compact</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">' AND '</span>), <span class="ruby-ivar">@query_params</span>] 
+64:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

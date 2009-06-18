@@ -56,7 +56,7 @@
     </tr>
     <tr class="top-aligned-row">
       <td><strong>Last Update:</strong></td>
-      <td>Thu Jan 29 06:36:25 +0100 2009</td>
+      <td>Sun Feb 01 10:38:19 +0100 2009</td>
     </tr>
     </table>
   </div>
@@ -71,24 +71,42 @@
     <div id="description">
       <h1>scoped_search</h1>
 <p>
-This simple plugin will make it easy to search your ActiveRecord models.
-Searching is performed using a query string, which should be passed to the
-named_scope <b>search_for</b> that uses SQL %LIKE% conditions for searching
-(ILIKE for Postgres). You can specify what fields should be used for
-searching.
+The <b>scoped_search</b> Rails plugin makes it easy to search your
+ActiveRecord models. Searching is performed using a query string, which
+should be passed to the named_scope <b>search_for</b> that uses SQL
+<tt>LIKE %keyword%</tt> conditions for searching (ILIKE for Postgres). You
+can specify what fields should be used for searching.
 </p>
 <h2>Installing</h2>
+<p>
+The recommended method to enable scoped_search in your project is adding
+the scoped_search gem to your environment. Add the following code to your
+Rails configuration in <tt>config/environment.rb</tt>:
+</p>
 <pre>
-        gem install wvanbergen-scoped_search -s http://gems.github.com
+  Rails::Initializer.run do |config|
+    ...
+    config.gem 'wvanbergen-scoped_search', :lib =&gt; 'scoped_search',
+                   source =&gt; 'http://gems.github.com/'
+  end
+</pre>
+<p>
+Run <tt>sudo rake gems:install</tt> to install the gem.
+</p>
+<p>
+Another alternative is to install scoped_search as a Rails plugin:
+</p>
+<pre>
+  script/plugin install git://github.com/wvanbergen/scoped_search.git
 </pre>
 <h2>Usage</h2>
 <p>
 First, you have to specify in what columns should be searched:
 </p>
 <pre>
-        class User &lt; ActiveRecord::Base
-          searchable_on :first_name, :last_name
-        end
+  class User &lt; ActiveRecord::Base
+    searchable_on :first_name, :last_name
+  end
 </pre>
 <p>
 Now, the <b>search_for</b> scope is available for queries. You should pass
@@ -96,7 +114,7 @@ a query string to the scope. This can be empty or nil, in which case all no
 search conditions are set (and all records will be returned).
 </p>
 <pre>
-        User.search_for(params[:q]).each { |project| ... }
+  User.search_for(params[:q]).each { |project| ... }
 </pre>
 <p>
 You can also search on associate models. This works with <b>belongs_to</b>,
@@ -105,56 +123,57 @@ You can also search on associate models. This works with <b>belongs_to</b>,
 created_at, updated_at)
 </p>
 <pre>
-        class User &lt; ActiveRecord::Base
-          has_many: notes
-          searchable_on :first_name, :last_name, :notes_title, :notes_content
-        end
+  class User &lt; ActiveRecord::Base
+    has_many: notes
+    searchable_on :first_name, :last_name, :notes_title, :notes_content
+  end
 </pre>
 <p>
 The search query language is simple. It supports these constructs:
 </p>
 <ul>
-<li><b>words:</b> some search keywords
+<li><b>words:</b> <tt>some search keywords</tt>
 
 </li>
-<li><b>phrases:</b> &quot;a single search phrase&quot;
+<li><b>phrases:</b> <tt>&quot;a single search phrase&quot;</tt>
 
 </li>
-<li><b>negation:</b> &quot;look for this&quot; -&quot;but do not look for this
-phrase and this&quot; -word
+<li><b>negation:</b> <tt>&quot;look for this&quot; -&quot;but do not look for
+this phrase and this&quot; -word</tt>
 
 </li>
-<li><b>OR words/phrases:</b> word/phrase OR word/phrase. Example: &quot;Hello
-World&quot; OR &quot;Hello Moon&quot;
+<li><b>OR words/phrases:</b> word/phrase OR word/phrase. Example:
+<tt>&quot;Hello World&quot; OR &quot;Hello Moon&quot;</tt>
 
 </li>
 <li><b>dates:</b> mm/dd/yyyy, dd/mm/yyyy, yyyy/mm/dd, yyyy-mm-dd
 
 </li>
 <li><b>date ranges:</b> &gt; date, &gt;= date, &lt; date, &lt;= date, date TO
-date. Examples: &gt; mm/dd/yyyy, &lt; yyyy-mm-dd
+date. Examples: <tt>&gt; 30/05/1983</tt>, <tt>&lt; 2009-01-30</tt>
 
 </li>
 </ul>
 <p>
-This functionality is build on named_scope. The searchable_on statement
-creates a named_scope <b>search_for</b>. Because of this, you can actually
-chain the call with other scopes. For example, this can be very useful if
-you only want to search in projects that are accessible by a given user.
+This functionality is build on <tt>named_scope</tt>. The searchable_on
+statement creates a named_scope <b>search_for</b>. Because of this, you can
+actually chain the call with other scopes. For example, this can be very
+useful if you only want to search in projects that are accessible by a
+given user.
 </p>
 <pre>
-        class Project &lt; ActiveRecord::Base
-          searchable_on :name, :description
-          named_scope :accessible_by, lambda { |user| ... }
-        end
+  class Project &lt; ActiveRecord::Base
+    searchable_on :name, :description
+    named_scope :accessible_by, lambda { |user| ... }
+  end
 
-        # using chained named_scopes and will_paginate
-        Project.accessible_by(current_user).search_for(params[:q]).paginate(:page =&gt; params[:page], :include =&gt; :tasks)
+  # using chained named_scopes and will_paginate
+  Project.accessible_by(current_user).search_for(params[:q]).paginate(:page =&gt; params[:page], :include =&gt; :tasks)
 </pre>
 <h2>Additional resources</h2>
 <ul>
 <li>Source code: <a
-href="http://github.com/wvanbergen/scoped_search">github.com/wvanbergen/scoped_search</a>
+href="http://github.com/wvanbergen/scoped_search/tree/master">github.com/wvanbergen/scoped_search/tree/master</a>
 
 </li>
 <li>Project wiki: <a
@@ -166,14 +185,16 @@ href="http://wvanbergen.github.com/scoped_search">wvanbergen.github.com/scoped_s
 
 </li>
 <li>wvanbergen&#8216;s blog posts: <a
-href="http://techblog.floorplanner.com/tag/scoped_search">techblog.floorplanner.com/tag/scoped_search</a>/
+href="http://techblog.floorplanner.com/tag/scoped_search">techblog.floorplanner.com/tag/scoped_search</a>
 
 </li>
 </ul>
 <h2>License</h2>
 <p>
-This plugin is released under the MIT license. Please contact (willem AT
-vanbergen DOT org) if you have any suggestions or remarks.
+This plugin is released under the MIT license. Please contact weshays (<a
+href="http://github.com/weshays">github.com/weshays</a>) or wvanbergen (<a
+href="http://github.com/wvanbergen">github.com/wvanbergen</a>) for any
+questions.
 </p>
 
     </div>
