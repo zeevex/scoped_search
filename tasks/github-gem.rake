@@ -18,7 +18,7 @@ module Rake
     
 
     def initialize
-      reload_gemspec!
+      # reload_gemspec!
     end
 
     def register_all_tasks!
@@ -97,7 +97,7 @@ module Rake
     protected 
 
     def has_rdoc?
-      @specification.has_rdoc
+      @specification && @specification.has_rdoc
     end
 
     def has_specs?
