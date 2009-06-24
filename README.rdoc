@@ -35,6 +35,41 @@ This can be empty or nil, in which case all no search conditions are set (and al
 
   User.search_for(params[:q]).each { |project| ... }
 
+You can define multiple scopes like so:
+
+  class User < ActiveRecord::Base
+    searchable_on do
+      name :name_search
+      fields :first_name, :last_name
+    end
+
+    searchable_on do
+      name :login_search
+      fields :login, :email
+    end
+    
+    # this is an alternative way to create the login_search
+    acts_as_scoped_search :login_search, :login, :email
+  end
+
+If you'd rather select the columns to search when invoking the named scope, you can do
+that with any scoped search, or with the default "scoped_search" scope created by the following:
+
+  class User < ActiveRecord::Base
+    # Creates a default scope called :scoped_search which searches all fields 
+    # of this model
+    acts_as_scoped_search 
+    
+    # you can refer to the default scope in another scope
+    named_scope :search_text_fields, lambda { |keywords| 
+      self.scoped_search(keywords, :login, :email, :first_name, :last_name) 
+    }
+    
+    # or from a function
+    def search_text_fields_function(keywords)
+      self.scoped_search(keywords, :login, :email, :first_name, :last_name)
+    end
+  end
 
 You can also search on associate models.  This works with <b>belongs_to</b>, <b>has_one</b>, <b>has_many</b>, 
 <b>has_many :through</b>, and <b>HABTM</b>.  For example if a User <b>has_many</b> Notes (title, content, created_at, updated_at)
