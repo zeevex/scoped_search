@@ -26,28 +26,28 @@ class ScopedSearch::Test::API < Test::Unit::TestCase
   def test_search_only_fields
     Foo.searchable_on :only => [:string_field, :text_field, :date_field]
     assert Foo.respond_to?(:search_for)
-    assert_equal Foo.scoped_search_fields.size, 3
-    assert Foo.scoped_search_fields.include?(:string_field)
-    assert Foo.scoped_search_fields.include?(:text_field)
-    assert Foo.scoped_search_fields.include?(:date_field)
+    assert_equal Foo.scoped_searches[:search_for].scoped_search_fields.size, 3
+    assert Foo.scoped_searches[:search_for].scoped_search_fields.include?(:string_field)
+    assert Foo.scoped_searches[:search_for].scoped_search_fields.include?(:text_field)
+    assert Foo.scoped_searches[:search_for].scoped_search_fields.include?(:date_field)
   end
   
   def test_search_except_fields
     Foo.searchable_on :except => [:id, :ignored_field, :created_at, :updated_at]
     assert Foo.respond_to?(:search_for)
-    assert_equal Foo.scoped_search_fields.size, 4
-    assert Foo.scoped_search_fields.include?(:string_field)
-    assert Foo.scoped_search_fields.include?(:text_field)
-    assert Foo.scoped_search_fields.include?(:date_field)
-    assert Foo.scoped_search_fields.include?(:some_int_field)
+    assert_equal Foo.scoped_searches[:search_for].scoped_search_fields.size, 4
+    assert Foo.scoped_searches[:search_for].scoped_search_fields.include?(:string_field)
+    assert Foo.scoped_searches[:search_for].scoped_search_fields.include?(:text_field)
+    assert Foo.scoped_searches[:search_for].scoped_search_fields.include?(:date_field)
+    assert Foo.scoped_searches[:search_for].scoped_search_fields.include?(:some_int_field)
   end  
   
   def test_search_with_only_and_except
     # :except should be ignored if :only is specified.
     Foo.searchable_on({:only => [:text_field], :except => [:text_field]})
     assert Foo.respond_to?(:search_for)
-    assert_equal Foo.scoped_search_fields.size, 1
-    assert Foo.scoped_search_fields.include?(:text_field), ':except should be ignored if :only is specified'
+    assert_equal Foo.scoped_searches[:search_for].scoped_search_fields.size, 1
+    assert Foo.scoped_searches[:search_for].scoped_search_fields.include?(:text_field), ':except should be ignored if :only is specified'
   end  
   
 end

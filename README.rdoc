@@ -23,7 +23,7 @@ Another alternative is to install scoped_search as a Rails plugin:
 
 == Usage
 
-First, you have to specify in what columns should be searched:
+First, you have to specify what columns should be searched:
 
   class User < ActiveRecord::Base
     searchable_on :first_name, :last_name
@@ -35,40 +35,69 @@ This can be empty or nil, in which case all no search conditions are set (and al
 
   User.search_for(params[:q]).each { |project| ... }
 
-You can define multiple scopes like so:
+While <b>search_for</b> is the default named search scope, you can define multiple
+scopes by naming them in other ways:
 
   class User < ActiveRecord::Base
+  
     searchable_on do
-      name :name_search
+      scope :name_search
       fields :first_name, :last_name
     end
 
     searchable_on do
-      name :login_search
+      scope :login_search
       fields :login, :email
     end
     
-    # this is an alternative way to create the login_search
+    # this is an alternative way to create the previous search scope
+    
     acts_as_scoped_search :login_search, :login, :email
   end
 
-If you'd rather select the columns to search when invoking the named scope, you can do
-that with any scoped search, or with the default "scoped_search" scope created by the following:
+Note that because all of the above provided names for the search scopes, <b>search_for</b>
+has not been defined.  This is useful if some other plugin or your own code has already
+defined a <b>search_for</b> method.
+
+If you'd rather select the columns to search at runtime, you can do that with the 
+default "scoped_search" scope created when you invoke "acts_as_scoped_search"
+or "searchable_on" in any way.  It's the most general method provided.
 
   class User < ActiveRecord::Base
-    # Creates a default scope called :scoped_search which searches all fields 
-    # of this model
+    # Creates a default scope called :scoped_search which takes 
+    # the keyword string, and a list of fields
     acts_as_scoped_search 
     
-    # you can refer to the default scope in another scope
+    # you can use the scoped_search scope to build another named_scope
     named_scope :search_text_fields, lambda { |keywords| 
-      self.scoped_search(keywords, :login, :email, :first_name, :last_name) 
+      scoped_search(keywords, :login, :email, :first_name, :last_name).
+         scoped(:order => 'users.id DESC')
     }
     
-    # or from a function
-    def search_text_fields_function(keywords)
-      self.scoped_search(keywords, :login, :email, :first_name, :last_name)
+    # or from a method
+    def user_logins_from_search(keywords)
+       User.scoped_search(keywords, :login, :email, :first_name, :last_name).
+         scoped(:order => 'users.id DESC').map &:login
     end
+  end
+
+Finally, you can specify additional columns to search in a named scoped_search when
+you invoke it.  The additional columns will only be used for that one query.  For
+example:
+
+
+  class User < ActiveRecord::Base
+
+    searchable_on :login, :email
+    
+    # you can use a named scoped search to build another search scope
+    # by adding columns - the scope below will search on all 4 text
+    # fields
+
+    named_scope :search_text_fields, lambda { |keywords| 
+         search_for(keywords, :first_name, :last_name)
+    }
+    
   end
 
 You can also search on associate models.  This works with <b>belongs_to</b>, <b>has_one</b>, <b>has_many</b>, 
@@ -99,6 +128,7 @@ projects that are accessible by a given user.
 
   # using chained named_scopes and will_paginate
   Project.accessible_by(current_user).search_for(params[:q]).paginate(:page => params[:page], :include => :tasks)
+
 
 == Additional resources
 

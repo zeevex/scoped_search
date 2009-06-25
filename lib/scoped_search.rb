@@ -10,11 +10,22 @@ module ScopedSearch
     end
 
     def [](name)
-      self.instance_variable_get("@#{name}")
+      self.instance_variable_get("@#{name.to_s}")
     end
+
+    def []=(name, val)
+      self.instance_variable_set("@#{name.to_s}", val)
+    end
+
+    # name and scope are synonyms
+    def name(val); @name = val.to_sym; end
+    def scope(val); name(val); end
     
-    def name(val); @name = val; end
     def fields(*val); @fields = val.flatten; end
+
+    def fieldspec
+      ScopedSearch::FieldSpec.new(self.model, self[:fields])
+    end
   end
 
   class FieldSpec
@@ -22,7 +33,24 @@ module ScopedSearch
 
     def initialize(model, fields)
       self.model = model
-      parse_fields(Array(fields).flatten.map &:to_sym)
+      parse_fields(Array(fields).flatten)
+    end
+
+    class << self
+      def make_scoped_search(model, keywords, fields)
+        builder = Builder.new(model, fields)
+        builder.fieldspec.build_scoped_search_conditions(keywords)
+      end
+    end
+
+    def as_fields
+      fields = [] + (self.scoped_search_fields || [])
+      scoped_search_assoc_groupings.each do |assoc, keys|
+        keys.each do |key|
+          fields.push "#{assoc}_#{key}".to_sym
+        end
+      end
+      fields
     end
 
     def parse_fields(fields)
@@ -124,22 +152,41 @@ module ScopedSearch
       require 'scoped_search/query_conditions_builder'
     end
 
-    def acts_as_scoped_search(name = :scoped_search, *fields)
-      fields.size == 0 && fields = self.columns_hash.keys
-      model = self
-      built_spec = ScopedSearch::FieldSpec.new(model, fields)
+    def acts_as_scoped_search(*args, &block)
+      if ! self.respond_to? :scoped_search
+        self.named_scope :scoped_search, lambda { |keywords, field, *fields|
+          ScopedSearch::FieldSpec.make_scoped_search(self, keywords, fields.push(field))
+        }
+      end
+      if args.size > 0 || block
+        self.define_scoped_search(*args, &block)
+      end
+    end
+
+    def define_scoped_search(name = :search_for, *fields, &block)
+      fields.size == 0 && fields = self.columns_hash.keys.map(&:to_sym)
+      builder = Builder.new(self, fields)
+      builder[:name] = name
+      builder.instance_eval(&block) if block
+
+      built_spec = builder.fieldspec
+      name = builder[:name].to_sym
       self.named_scope name, lambda { |*args|
         keywords = args.shift
-        spec_to_use = args.size == 0 ? built_spec : ScopedSearch::FieldSpec.new(model, args.flatten)
+        spec_to_use = args.size == 0 ? built_spec :
+                ScopedSearch::FieldSpec.new(self, built_spec.as_fields + args.flatten)
         spec_to_use.build_scoped_search_conditions(keywords)
       }
+      if ! self.respond_to? :scoped_searches
+        cattr_accessor :scoped_searches
+        self.scoped_searches = {}
+      end
+      self.scoped_searches[name] = built_spec
     end
- 
+
     def searchable_on(*fields, &block)
-      fields.size == 0 && fields = self.columns_hash.keys
-      builder = Builder.new(self, fields)
-      builder.instance_eval(&block)
-      self.acts_as_scoped_search(builder['name'], builder['fields'])
+      self.acts_as_scoped_search
+      self.define_scoped_search(:search_for, fields, &block)
     end
     
   end
