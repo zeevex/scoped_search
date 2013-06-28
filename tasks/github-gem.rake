@@ -73,7 +73,8 @@ module Rake
     
       # Setup :spec task if RSpec files exist
       if has_specs?
-        require 'spec/rake/spectask'
+        # require 'spec/rake/spectask'
+        require 'rspec/core/rake_task'
 
         desc "Run all specs for #{@name}"
         Spec::Rake::SpecTask.new(:spec) do |t|

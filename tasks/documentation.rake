@@ -1,5 +1,5 @@
 require 'rubygems'
-require 'rake/rdoctask'
+require 'rdoc/task'
 
 desc 'Generate documentation for the acts_as_callback_logger plugin.'
 Rake::RDocTask.new do |rdoc|
