@@ -154,7 +154,7 @@ module ScopedSearch
 
     def acts_as_scoped_search(*args, &block)
       if ! self.respond_to? :scoped_search
-        self.named_scope :scoped_search, lambda { |keywords, field, *fields|
+        self.scope :scoped_search, lambda { |keywords, field, *fields|
           ScopedSearch::FieldSpec.make_scoped_search(self, keywords, fields.push(field))
         }
       end
@@ -171,7 +171,7 @@ module ScopedSearch
 
       built_spec = builder.fieldspec
       name = builder[:name].to_sym
-      self.named_scope name, lambda { |*args|
+      self.scope name, lambda { |*args|
         keywords = args.shift
         spec_to_use = args.size == 0 ? built_spec :
                 ScopedSearch::FieldSpec.new(self, built_spec.as_fields + args.flatten)
